@@ -16,7 +16,7 @@ boolean INVERT_1 = true;
 boolean INVERT_2 = false;
 
 // Constants
-int SPEED_LIMIT = 256; // Between 0-512
+int SPEED_LIMIT = 300; // Between 0-512
 int DEADBAND = 150;
 int RAMPING = 2;
 int WARNING_DISTANCE = 18; // Distance in inches to sound piezo
@@ -34,7 +34,7 @@ int ULTRASONIC = 6;
 int PIEZO      = 9;
 
 // Debug Over Serial - Requires a FTDI cable
-boolean DEBUG = true;
+boolean DEBUG = false;
 
 // -----Don't Mess With Anything Past This Line-----
 
@@ -177,7 +177,7 @@ void setPiezo(boolean state){
 }
 
 void debug(String s, int value){
-  if(debug){
+  if(DEBUG){
     Serial.print(s);
     Serial.print(": ");
     Serial.println(value);
