@@ -6,14 +6,14 @@
 #include <Servo.h>
 
 // Mechanical Setup - Either TWO_MOTORS or SERVO_STEERING should be true, not both!
-boolean TWO_MOTORS          = true;
-boolean SERVO_STEERING      = false;
-boolean SPEED_POTENTIOMETER = true;
-boolean DISTANCE_WARNING    = true;
+boolean TWO_MOTORS          = false;
+boolean SERVO_STEERING      = true;
+boolean SPEED_POTENTIOMETER = false;
+boolean DISTANCE_WARNING    = false;
 
 // Invert one or two of the motors
-boolean INVERT_1 = false;
-boolean INVERT_2 = true;
+boolean INVERT_1 = true;
+boolean INVERT_2 = false;
 
 // Constants
 int SPEED_LIMIT = 256; // Between 0-512
@@ -24,7 +24,7 @@ int REVERSE_PULSE    = 1000; // Talon SR is 1000
 int FORWARD_PULSE    = 2000; // Talon SR is 2000
 
 // Pins
-int JOYSTICK_X = A2;
+int JOYSTICK_X = A1;
 int JOYSTICK_Y = A0;
 int MOTOR_1    = 10;
 int MOTOR_2    = 11;
