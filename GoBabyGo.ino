@@ -9,14 +9,14 @@
 boolean TWO_MOTORS          = true;
 boolean SERVO_STEERING      = false;
 boolean SPEED_POTENTIOMETER = true;
-boolean DISTANCE_WARNING    = false;
+boolean DISTANCE_WARNING    = true;
 
 // Invert one or two of the motors
 boolean INVERT_1 = false;
 boolean INVERT_2 = true;
 
 // Constants
-int SPEED_LIMIT = 192; // Between 0-512
+int SPEED_LIMIT = 256; // Between 0-512
 int DEADBAND = 150;
 int RAMPING = 2;
 int WARNING_DISTANCE = 18; // Distance in inches to sound piezo
@@ -102,7 +102,7 @@ void loop() {
   }
 
   if(DISTANCE_WARNING){
-    int inches = pulseIn(ULTRASONIC, HIGH)/147;
+    int inches = pulseIn(ULTRASONIC, HIGH)/144;
     debug("Inches", inches);
     if(inches<WARNING_DISTANCE){
       setPiezo(true);
@@ -156,10 +156,22 @@ void drive(int left, int right){
   prevRight = speed2;
 }
 
+boolean trigger = true;
+int count = 0;
+
 void setPiezo(boolean state){
   if(state){
-    tone(PIEZO, 1300); // If this sounds wierd pick 4000
+    if(count>=4){
+      trigger = !trigger;
+      count = 0;
+    }else{
+      if(trigger) tone(PIEZO, 1300);
+      else noTone(PIEZO);
+    }
+    count++;
   }else{
+    trigger = false;
+    count = 0;
     noTone(PIEZO);
   }
 }
