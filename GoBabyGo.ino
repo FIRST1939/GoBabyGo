@@ -34,7 +34,7 @@ int ULTRASONIC = 6;
 int PIEZO      = 9;
 
 // Debug Over Serial - Requires a FTDI cable
-boolean DEBUG = true;
+boolean DEBUG = false;
 
 // -----Don't Mess With Anything Past This Line-----
 
@@ -177,7 +177,7 @@ void setPiezo(boolean state){
 }
 
 void debug(String s, int value){
-  if(debug){
+  if(DEBUG){
     Serial.print(s);
     Serial.print(": ");
     Serial.println(value);
