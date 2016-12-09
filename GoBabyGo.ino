@@ -19,7 +19,7 @@ boolean INVERT_2 = true;
 int SPEED_LIMIT = 256; // Between 0-512
 int DEADBAND = 150;
 int RAMPING = 2;
-int WARNING_DISTANCE = 18; // Distance in inches to sound piezo
+int WARNING_DISTANCE = 14; // Distance in inches to sound piezo
 int REVERSE_PULSE    = 1000; // Talon SR is 1000
 int FORWARD_PULSE    = 2000; // Talon SR is 2000
 
