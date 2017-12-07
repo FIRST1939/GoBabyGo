@@ -11,9 +11,9 @@
 
 #include <Servo.h>
 
-// Mechanical Setup - Either TWO_MOTORS or SERVO_STEERING should be true, not both!
+// Set this to true if using a Speed Potentiometer
 boolean SPEED_POTENTIOMETER = true;
-//boolean DISTANCE_WARNING    = true;
+// boolean DISTANCE_WARNING = true;
 
 // Invert one or two of the motors
 boolean INVERT_1 = false;
@@ -25,6 +25,7 @@ int DEADBAND = 10;
 int RAMP_UP = 2;
 int RAMP_DOWN = 10;
 
+// Middle value of the upper and lower limit of the motor controller, 1500 is for Sparks and Talon SR's
 int PULSE = 1500; 
 
 // Pins
@@ -68,27 +69,13 @@ void loop() {
   y = digitalRead(JOYSTICK_Y);
   xNeg = digitalRead(JOYSTICK_XNeg);
   yNeg = digitalRead(JOYSTICK_YNeg);
+
+  // Reads from the Speed Potentiometer and divides that value (max of 1024) by 4 ----- The values sent to the motor controllers are between 1756 and 1244 (+ or - 256 the PULSE) ----- These values are a good speed for the WildThing
   Speed = (1024-analogRead(SPEED_POT)) / 4;
-   
- // Serial.println("Has Serial");
-      
-   
 
-  //Apply exponential to raw inputs
-
-  //Establish a speed limit
+  // Establish a speed limit
   int limit = SPEED_LIMIT;
-//  Serial.println(Speed);
-//  delay(50);
   if (SPEED_POTENTIOMETER) limit = map(analogRead(SPEED_POT), 0, 1023, 0, SPEED_LIMIT);
-
-
-
-
-//  Serial.print("Left Speed: ");
-//  Serial.print(leftMotorSpeed);
-//  Serial.print(" Right Speed: ");
-//  Serial.println(rightMotorSpeed);
 
   if(x == LOW && y == HIGH && yNeg == HIGH){
     drive(Speed, -Speed);
@@ -114,8 +101,6 @@ void loop() {
     drive(0 , 0);
   }
     
-  
-
   delay(10); //Make loop run approximately 50hz
 
 }
@@ -138,11 +123,15 @@ void drive(int leftSpeed, int rightSpeed) {
   }
 
   if (leftSpeed < prevLeft){
-    leftOut = leftSpeed - RAMP_DOWN;
+    leftOut = leftSpeed - ramp;
   }
 
   else if (leftSpeed > prevLeft){
-    leftOut = leftSpeed + RAMP_UP;
+    leftOut = leftSpeed + ramp;
+  }
+
+  if (INVERT_1){
+    leftOut = -leftOut;
   }
   motor1.writeMicroseconds(leftOut + PULSE);
   
@@ -161,6 +150,10 @@ void drive(int leftSpeed, int rightSpeed) {
   else if (rightSpeed > prevRight){
     rightOut = rightSpeed + RAMP_UP;
   }
-  motor2.writeMicroseconds(-rightOut + PULSE);
+
+  if (INVERT_2){
+    rightOut = -rightOut;
+  }
+  motor2.writeMicroseconds(rightOut + PULSE);
 }
 
