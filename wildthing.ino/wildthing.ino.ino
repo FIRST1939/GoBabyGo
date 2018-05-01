@@ -20,22 +20,22 @@ boolean INVERT_1 = false;
 boolean INVERT_2 = true;
 
 // Constants
-int SPEED_LIMIT = 350; // Between 0-512
+int SPEED_LIMIT = 500; // Between 0-512
 int DEADBAND = 10;
-int RAMP_UP = 2;
-int RAMP_DOWN = 10;
+int RAMP_UP = 7;
+int RAMP_DOWN = 5;
 
 // Middle value of the upper and lower limit of the motor controller, 1500 is for Sparks and Talon SR's
 int PULSE = 1500; 
 
 // Pins
 int JOYSTICK_X = 9;
-int JOYSTICK_Y = 8;
-int JOYSTICK_XNeg = 10;
+int JOYSTICK_Y = 10;
+int JOYSTICK_XNeg = 8;
 int JOYSTICK_YNeg = 11;
 int MOTOR_1    = 6;
-int MOTOR_2    = 7;
-int SPEED_POT  = A1;
+int MOTOR_2    = 5;
+int SPEED_POT  = A5;
 
 
 // -----Don't Mess With Anything Past This Line-----
@@ -78,12 +78,12 @@ void loop() {
   if (SPEED_POTENTIOMETER) limit = map(analogRead(SPEED_POT), 0, 1023, 0, SPEED_LIMIT);
 
   if(x == LOW && y == HIGH && yNeg == HIGH){
-    drive(Speed, -Speed);
+    drive(-Speed, Speed);
     Serial.println("Moving Right");
   }
   
   else if (xNeg == LOW && y == HIGH && yNeg == HIGH) {
-      drive(-Speed , Speed);
+      drive(Speed , -Speed);
       Serial.println("Moving Left");
   }
   
@@ -123,17 +123,19 @@ void drive(int leftSpeed, int rightSpeed) {
   }
 
   if (leftSpeed < prevLeft){
-    leftOut = leftSpeed - ramp;
+    leftOut = prevLeft - ramp;
+    
   }
 
   else if (leftSpeed > prevLeft){
-    leftOut = leftSpeed + ramp;
+    leftOut = prevLeft + ramp;
   }
 
   if (INVERT_1){
     leftOut = -leftOut;
   }
   motor1.writeMicroseconds(leftOut + PULSE);
+  prevLeft = leftOut;
   
   if (((rightSpeed * prevRight) < 0) || (abs(rightSpeed) < abs(prevRight))){
     ramp = RAMP_DOWN;
@@ -144,16 +146,19 @@ void drive(int leftSpeed, int rightSpeed) {
   }
 
   if (rightSpeed < prevRight){
-    rightOut = rightSpeed - RAMP_DOWN;
+    rightOut = prevRight - ramp;
+    Serial.println("Is Ramping Down");
   }
 
   else if (rightSpeed > prevRight){
-    rightOut = rightSpeed + RAMP_UP;
+    rightOut = prevRight + ramp;
+    Serial.println("Is Ramping Up");
   }
 
   if (INVERT_2){
     rightOut = -rightOut;
   }
   motor2.writeMicroseconds(rightOut + PULSE);
+  prevRight = -rightOut;
 }
 
