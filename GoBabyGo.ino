@@ -9,11 +9,11 @@
 boolean TWO_MOTORS          = true;
 boolean SERVO_STEERING      = false;
 boolean SPEED_POTENTIOMETER = true;
-boolean DISTANCE_WARNING    = true;
+boolean DISTANCE_WARNING    = false;
 
 // Invert one or two of the motors
-boolean INVERT_1 = false;
-boolean INVERT_2 = true;
+boolean INVERT_1 = true;
+boolean INVERT_2 = false;
 
 // Constants
 int SPEED_LIMIT = 256; // Between 0-512
@@ -24,12 +24,12 @@ int REVERSE_PULSE    = 1000; // Talon SR is 1000
 int FORWARD_PULSE    = 2000; // Talon SR is 2000
 
 // Pins
-int JOYSTICK_X = A2;
-int JOYSTICK_Y = A0;
+int JOYSTICK_X = 1;
+int JOYSTICK_Y = 2;
 int MOTOR_1    = 10;
-int MOTOR_2    = 11;
+int MOTOR_2    = 9;
 int SERVO      = 5;
-int SPEED_POT  = A3;
+int SPEED_POT  = 0;
 int ULTRASONIC = 6;
 int PIEZO      = 9;
 
@@ -119,8 +119,8 @@ void arcadeDrive(int moveValue, int rotateValue) {
   int rightMotorSpeed = 0;
   if (moveValue > 0.0) {
       if (rotateValue > 0.0) {
-        leftMotorSpeed = moveValue - rotateValue;
-        rightMotorSpeed = max(moveValue, rotateValue);
+        leftMotorSpeed = (moveValue - rotateValue);
+        rightMotorSpeed = (max(moveValue, rotateValue));
       } else {
         leftMotorSpeed = max(moveValue, -rotateValue);
         rightMotorSpeed = moveValue + rotateValue;
@@ -142,18 +142,20 @@ int prevRight = 500;
 
 void drive(int left, int right){
   int speed1 = map(left, 0, 1023, 0, FORWARD_PULSE-REVERSE_PULSE);
-  if(speed1>prevLeft+RAMPING) speed1=speed1+RAMPING;
-  else if(speed1<prevLeft-RAMPING) speed1=speed1-RAMPING;
-  if(INVERT_1) motor1.writeMicroseconds(FORWARD_PULSE-speed1);
-  else motor1.writeMicroseconds(REVERSE_PULSE+speed1);
-  prevLeft = speed1;
+  // if(speed1>prevLeft+RAMPING) speed1=speed1+RAMPING;
+  // else if(speed1<prevLeft-RAMPING) speed1=speed1-RAMPING;
+  // if(INVERT_1) motor1.writeMicroseconds(FORWARD_PULSE-speed1);
+  // else motor1.writeMicroseconds(REVERSE_PULSE+speed1);
+  // prevLeft = speed1;
+  motor1.writeMicroseconds(REVERSE_PULSE+speed1);
   
   int speed2 = map(right, 0, 1023, 0, FORWARD_PULSE-REVERSE_PULSE);
-  if(speed2>prevLeft+RAMPING) speed2=speed2+RAMPING;
-  else if(speed2<prevLeft-RAMPING) speed2=speed2-RAMPING;
-  if(INVERT_2) motor2.writeMicroseconds(FORWARD_PULSE-speed2);
-  else motor2.writeMicroseconds(REVERSE_PULSE+speed2);
-  prevRight = speed2;
+  // if(speed2>prevLeft+RAMPING) speed2=speed2+RAMPING;
+  // else if(speed2<prevLeft-RAMPING) speed2=speed2-RAMPING;
+  // if(INVERT_2) motor2.writeMicroseconds(FORWARD_PULSE-speed2);
+  // else motor2.writeMicroseconds(REVERSE_PULSE+speed2);
+  // prevRight = speed2;
+  motor2.writeMicroseconds(REVERSE_PULSE+speed2);
 }
 
 boolean trigger = true;
@@ -183,4 +185,3 @@ void debug(String s, int value){
     Serial.println(value);
   }
 }
-
