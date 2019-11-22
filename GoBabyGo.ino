@@ -8,7 +8,7 @@
 // Mechanical Setup - Either TWO_MOTORS or SERVO_STEERING should be true, not both!
 boolean TWO_MOTORS          = true;
 boolean SERVO_STEERING      = false;
-boolean SPEED_POTENTIOMETER = true;
+boolean SPEED_POTENTIOMETER = false;
 boolean DISTANCE_WARNING    = false;
 
 // Invert one or two of the motors
@@ -27,14 +27,14 @@ int FORWARD_PULSE    = 2000; // Talon SR is 2000
 int JOYSTICK_X = 1;
 int JOYSTICK_Y = 2;
 int MOTOR_1    = 10;
-int MOTOR_2    = 9;
+int MOTOR_2    = 8;
 int SERVO      = 5;
 int SPEED_POT  = 0;
 int ULTRASONIC = 6;
 int PIEZO      = 9;
 
 // Debug Over Serial - Requires a FTDI cable
-boolean DEBUG = false;
+boolean DEBUG = true;
 
 // -----Don't Mess With Anything Past This Line-----
 
